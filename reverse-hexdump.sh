@@ -38,7 +38,11 @@ BEGIN {
 
 /^[[:xdigit:]]/ && repeat == 0 {
 	curr_offset = strtonum("0x" $1)
+        # Avoid hardcoding column positions
+        match($0, /^[[:xdigit:]]+ +((([[:xdigit:]]{2} ){1,16}))/)
 	hex_representation = substr($0,11,48)
+        # Trim trailing spaces
+        gsub(/[[:space:]]+$/, "", hex_representation)
 	curr_offset += outputbinary(hex_representation)
 }
 
